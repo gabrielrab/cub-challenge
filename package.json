@@ -1,0 +1,11 @@
+{
+  "name": "cub-challenge",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/gabrielrab/cub-challenge.git",
+  "author": "Gabriel Rabelo <rabelogabriel72@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
