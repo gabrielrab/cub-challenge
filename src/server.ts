@@ -25,10 +25,12 @@ const PORT = process.env.PORT || 3000;
 
 void (async () => {
   try {
+    await sequelize.authenticate();
     await sequelize.sync();
 
     const app = express();
-    // await sequelize.authenticate();
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
 
     app.use('/health', healthRoutes);
     app.use('/notifications', notificationRoutes);
