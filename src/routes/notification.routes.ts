@@ -24,9 +24,14 @@ router.post('/send', async (request: Request, response: Response) => {
 });
 
 router.post('/webhook', async (request: Request, response: Response) => {
-  const { timestamp, status, externalId } = request.body;
-  await webhookQueue.add('processWebhook', { timestamp, status, externalId });
-  return response.status(202).json();
+  try {
+    const { timestamp, status, externalId } = request.body;
+    await webhookQueue.add('processWebhook', { timestamp, status, externalId });
+    return response.status(202).json();
+  } catch (error) {
+    console.error(error);
+    return response.status(400).json(error);
+  }
 });
 
 export default router;
