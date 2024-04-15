@@ -5,7 +5,22 @@
   "repository": "https://github.com/gabrielrab/cub-challenge.git",
   "author": "Gabriel Rabelo <rabelogabriel72@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc"
+  },
+  "engines": {
+    "node": "21.x"
+  },
   "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "tsx": "^4.7.2",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
   }
 }
