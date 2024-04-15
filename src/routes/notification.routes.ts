@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import type { Request, Response } from 'express';
-import { sendNotification } from '../services/notification';
+import { processWebhook, sendNotification } from '../services/notification';
 
 const router = Router();
 
@@ -10,8 +10,10 @@ router.post('/send', async (request: Request, response: Response) => {
   return response.status(201).json(notification);
 });
 
-router.post('/webhook', (request: Request, response: Response) => {
-  return response.status(500).json({ message: 'not yet implemented' });
+router.post('/webhook', async (request: Request, response: Response) => {
+  const { timestamp, status, externalId } = request.body;
+  await processWebhook(timestamp, status, externalId);
+  return response.status(200).json();
 });
 
 export default router;
