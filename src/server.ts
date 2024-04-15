@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import healthRoutes from './routes/health.routes';
 import notificationRoutes from './routes/notification.routes';
+import sequelize from './database/sequelize';
 
 enum ExitStatus {
   Failure = 1,
@@ -24,7 +25,10 @@ const PORT = process.env.PORT || 3000;
 
 void (async () => {
   try {
+    await sequelize.sync();
+
     const app = express();
+    // await sequelize.authenticate();
 
     app.use('/health', healthRoutes);
     app.use('/notifications', notificationRoutes);
