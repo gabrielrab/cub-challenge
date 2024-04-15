@@ -17,20 +17,33 @@ export enum NotificationStatusEnum {
 const Notification = sequelize.define('Notification', {
   channel: {
     type: DataTypes.ENUM,
-    values: Object.values(NotificationChannelEnum)
+    values: Object.values(NotificationChannelEnum),
+    validate: {
+      isIn: [Object.values(NotificationChannelEnum)]
+    }
   },
   to: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    validate: {
+      is: /^\+?[1-9]\d{1,3}[1-9]\d{7,}$/
+    }
   },
   body: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
   externalId: {
     type: DataTypes.STRING
   },
   status: {
     type: DataTypes.STRING,
-    values: Object.values(NotificationStatusEnum)
+    values: Object.values(NotificationStatusEnum),
+    validate: {
+      isIn: [Object.values(NotificationStatusEnum)]
+    }
   },
   statusTimestamp: {
     type: DataTypes.DATE
