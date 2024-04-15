@@ -58,9 +58,9 @@ const processWebhook = async (timestamp: string, status: string, externalId: str
     );
 
     if (!valid) {
-      // TODO add logic here after
-      console.log('invalid update');
-      return;
+      const errorMessage = `Invalid status change: ${updatedNotification.status} -> ${status}`;
+      console.log(errorMessage);
+      throw new Error(errorMessage);
     }
 
     updatedNotification.status = status;

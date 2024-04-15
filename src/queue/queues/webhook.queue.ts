@@ -13,12 +13,8 @@ const worker = new Worker(
   queueName,
   async (job: Job) => {
     console.log(`Processing job ${job.id}`);
-    try {
-      const { timestamp, event, externalId } = job.data;
-      await processWebhook(timestamp, event, externalId);
-    } catch (error: any) {
-      console.error(`Failed to process job ${job.id}: ${error}`);
-    }
+    const { timestamp, status, externalId } = job.data;
+    await processWebhook(timestamp, status, externalId);
   },
   { connection: bullConnection }
 );
