@@ -1,6 +1,6 @@
 const bullConnection = {
-  host: 'localhost',
-  port: 6379
+  host: String(process.env.REDIS_HOST),
+  port: +(process.env.REDIS_PORT ?? 6379)
 };
 
 const defaultJobOptions = {
