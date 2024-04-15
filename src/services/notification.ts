@@ -4,7 +4,7 @@ const notificationStateValidate = (
   channel: NotificationChannelEnum,
   previous: NotificationStatusEnum,
   next: NotificationStatusEnum
-): Boolean => {
+): boolean => {
   type StateManager = {
     [key in NotificationChannelEnum]: {
       [state in NotificationStatusEnum]?: NotificationStatusEnum[];
@@ -23,7 +23,7 @@ const notificationStateValidate = (
     }
   };
 
-  const validNextStates = stateManager[channel][previous] || [];
+  const validNextStates = stateManager[channel][previous] ?? [];
   return validNextStates.includes(next);
 };
 
@@ -42,7 +42,7 @@ const sendNotification = async (
     statusTimestamp: new Date(),
     version: 1
   });
-  return notification.toJSON();
+  return await notification.toJSON();
 };
 const processWebhook = async (timestamp: string, status: string, externalId: string): Promise<void> => {
   const eventDate = new Date(timestamp);
@@ -58,8 +58,8 @@ const processWebhook = async (timestamp: string, status: string, externalId: str
     );
 
     if (!valid) {
-      // add logic here after
-      console.log('valid update');
+      // TODO add logic here after
+      console.log('invalid update');
       return;
     }
 

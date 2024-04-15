@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import type { Request, Response } from 'express';
-import { processWebhook, sendNotification } from '../services/notification';
+import { sendNotification } from '../services/notification';
+import { webhookQueue } from '../queue/queues/webhook.queue';
 
 const router = Router();
 
@@ -12,8 +13,8 @@ router.post('/send', async (request: Request, response: Response) => {
 
 router.post('/webhook', async (request: Request, response: Response) => {
   const { timestamp, status, externalId } = request.body;
-  await processWebhook(timestamp, status, externalId);
-  return response.status(200).json();
+  await webhookQueue.add('processWebhook', { timestamp, status, externalId });
+  return response.status(202).json();
 });
 
 export default router;

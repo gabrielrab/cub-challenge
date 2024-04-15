@@ -1,0 +1,12 @@
+version: '3'
+volumes:
+  data:
+
+services:
+  redis:
+    image: redis:6.2-alpine
+    container_name: club-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - data:/var/lib/redis

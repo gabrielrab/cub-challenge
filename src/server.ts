@@ -3,6 +3,10 @@ import express from 'express';
 import healthRoutes from './routes/health.routes';
 import notificationRoutes from './routes/notification.routes';
 import sequelize from './database/sequelize';
+import { createBullBoard } from '@bull-board/api';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
+import { ExpressAdapter } from '@bull-board/express';
+import { webhookQueue } from './queue/queues/webhook.queue';
 
 enum ExitStatus {
   Failure = 1,
@@ -10,9 +14,7 @@ enum ExitStatus {
 }
 
 process.on('unhandledRejection', (reason: any, promise: any) => {
-  console.error(
-    `App exiting due to an unhandled promise: ${promise} and reason: ${reason}`
-  );
+  console.error(`App exiting due to an unhandled promise: ${promise} and reason: ${reason}`);
   throw reason;
 });
 
@@ -21,7 +23,7 @@ process.on('uncaughtException', (error: any) => {
   process.exit(ExitStatus.Failure);
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ?? 3000;
 
 void (async () => {
   try {
@@ -32,6 +34,15 @@ void (async () => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
+    const serverAdapter = new ExpressAdapter();
+    createBullBoard({
+      queues: [new BullMQAdapter(webhookQueue)],
+      serverAdapter
+    });
+
+    serverAdapter.setBasePath('/admin/queues');
+
+    app.use('/admin/queues', serverAdapter.getRouter());
     app.use('/health', healthRoutes);
     app.use('/notifications', notificationRoutes);
 
@@ -57,7 +68,7 @@ void (async () => {
         })();
       });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(`App exited with exception: ${error}`);
     process.exit(ExitStatus.Failure);
   }
