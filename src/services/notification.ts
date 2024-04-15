@@ -1,4 +1,6 @@
-import Notification from '../database/models/notification.model';
+import Notification, {
+  NotificationStatusEnum
+} from '../database/models/notification.model';
 
 const sendNotification = async (
   channel: string,
@@ -11,7 +13,7 @@ const sendNotification = async (
     to,
     body,
     externalId,
-    status: 'sent',
+    status: NotificationStatusEnum.SENT,
     statusTimestamp: new Date(),
     version: 1
   });

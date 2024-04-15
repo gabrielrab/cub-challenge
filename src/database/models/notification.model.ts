@@ -1,9 +1,23 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 
+export enum NotificationChannelEnum {
+  SMS = 'sms',
+  WHATSAPP = 'whatsapp'
+}
+
+export enum NotificationStatusEnum {
+  PROCESSING = 'processing',
+  REJECTED = 'rejected',
+  SENT = 'sent',
+  DELIVERED = 'delivered',
+  VIEWED = 'viewed'
+}
+
 const Notification = sequelize.define('Notification', {
   channel: {
-    type: DataTypes.STRING
+    type: DataTypes.ENUM,
+    values: Object.values(NotificationChannelEnum)
   },
   to: {
     type: DataTypes.STRING
@@ -16,7 +30,7 @@ const Notification = sequelize.define('Notification', {
   },
   status: {
     type: DataTypes.STRING,
-    values: ['processing', 'rejected', 'sent', 'delivered', 'viewed']
+    values: Object.values(NotificationStatusEnum)
   },
   statusTimestamp: {
     type: DataTypes.DATE
