@@ -45,7 +45,7 @@ void (async () => {
         void (async () => {
           try {
             server.close(async () => {
-              // close here all necessary resources
+              await sequelize.close();
             });
             console.info(`App exited with success`);
             process.exit(ExitStatus.Success);
