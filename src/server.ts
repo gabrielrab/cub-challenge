@@ -1,5 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
+import healthRoutes from './routes/health.routes';
+import notificationRoutes from './routes/notification.routes';
 
 enum ExitStatus {
   Failure = 1,
@@ -23,6 +25,10 @@ const PORT = process.env.PORT || 3000;
 void (async () => {
   try {
     const app = express();
+
+    app.use('/health', healthRoutes);
+    app.use('/notifications', notificationRoutes);
+
     const server = app.listen(PORT, () => {
       console.log(`🔥 Api running on port: ${PORT}`);
     });
