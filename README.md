@@ -31,7 +31,7 @@ Para executar os testes automatizados da aplicação utilize os seguintes comand
 | POST       | /notifications/send    | Rota para criação de uma nova notificação             |
 | GET        | /admin/queues          | UI para visualização das queues utilizando Bull Board |
 
-Você pode ter acesso a toda coleção de endpoints da API utilizando o [Insomnia](https://insomnia.rest/download). Basta fazer o download do [arquivo de requests](https://github.com/gabrielrab/cub-challenge/tree/main/assets/request-collections.json) e importar dentro do Insomnia.
+Você pode ter acesso a toda coleção de endpoints da API utilizando o [Insomnia](https://insomnia.rest/download). Basta fazer o download do [arquivo de requests](https://github.com/gabrielrab/cub-challenge/blob/main/assets/request-collenction.json) e importar dentro do Insomnia.
 
 ## Estrutura de arquivos
 
