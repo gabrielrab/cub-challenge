@@ -36,7 +36,8 @@ const Notification = sequelize.define('Notification', {
     }
   },
   externalId: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    allowNull: false
   },
   status: {
     type: DataTypes.STRING,
@@ -46,10 +47,12 @@ const Notification = sequelize.define('Notification', {
     }
   },
   statusTimestamp: {
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    allowNull: false
   },
   version: {
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    defaultValue: 1
   }
 });
 
