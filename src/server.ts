@@ -1,13 +1,6 @@
 import 'dotenv/config';
-import express from 'express';
-import healthRoutes from './routes/health.routes';
-import notificationRoutes from './routes/notification.routes';
+import app from './app';
 import sequelize from './database/sequelize';
-import { createBullBoard } from '@bull-board/api';
-import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
-import { ExpressAdapter } from '@bull-board/express';
-import { webhookQueue } from './queue/queues/webhook.queue';
-
 enum ExitStatus {
   Failure = 1,
   Success = 0
@@ -29,22 +22,6 @@ void (async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync();
-
-    const app = express();
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-
-    const serverAdapter = new ExpressAdapter();
-    createBullBoard({
-      queues: [new BullMQAdapter(webhookQueue)],
-      serverAdapter
-    });
-
-    serverAdapter.setBasePath('/admin/queues');
-
-    app.use('/admin/queues', serverAdapter.getRouter());
-    app.use('/health', healthRoutes);
-    app.use('/notifications', notificationRoutes);
 
     const server = app.listen(PORT, () => {
       console.log(`🔥 Api running on port: ${PORT}`);
