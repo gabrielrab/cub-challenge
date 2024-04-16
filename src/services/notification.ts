@@ -1,5 +1,16 @@
 import Notification, { NotificationStatusEnum, NotificationChannelEnum } from '../database/models/notification.model';
 
+interface NotificationResponse {
+  id?: number;
+  channel: NotificationChannelEnum;
+  to: string;
+  body: string;
+  externalId: string;
+  status: NotificationStatusEnum;
+  statusTimestamp: Date;
+  version: number;
+}
+
 const notificationStateValidate = (
   channel: NotificationChannelEnum,
   previous: NotificationStatusEnum,
@@ -32,7 +43,7 @@ const sendNotification = async (
   to: string,
   body: string,
   externalId: string
-): Promise<Notification> => {
+): Promise<NotificationResponse> => {
   const notification = await Notification.create({
     channel,
     to,
@@ -71,4 +82,4 @@ const processWebhook = async (timestamp: string, status: string, externalId: str
   }
 };
 
-export { sendNotification, processWebhook };
+export { sendNotification, processWebhook, notificationStateValidate };
