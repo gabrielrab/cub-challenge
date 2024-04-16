@@ -1,6 +1,7 @@
 import { Queue, Worker, type Job } from 'bullmq';
 import { processWebhook } from '../../services/notification';
 import { bullConnection, defaultJobOptions } from '../config';
+import { sendToKinesis } from '../../services/event_stream';
 
 const queueName = 'webhookQueue';
 
@@ -19,8 +20,8 @@ const worker = new Worker(
   { connection: bullConnection }
 );
 
-worker.on('completed', (job: Job) => {
-  // TODO: enviar aqui os dados de atualização
+worker.on('completed', async (job: Job) => {
+  await sendToKinesis('notification', JSON.stringify({ ...job.data }));
   console.log(`Job '${job.name}' completed`);
 });
 

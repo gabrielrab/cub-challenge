@@ -10,3 +10,16 @@ services:
       - '6379:6379'
     volumes:
       - data:/var/lib/redis
+
+  localstack:
+    container_name: localstack
+    image: localstack/localstack
+    ports:
+      - '127.0.0.1:4566:4566'
+    environment:
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - '${PWD}/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh'
+      - '${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'

@@ -4,11 +4,11 @@ const bullConnection = {
 };
 
 const defaultJobOptions = {
-  delay: process.env.BULL_JOB_DELAY_MS,
-  attempts: process.env.BULL_ATTEMPTS_DELAY,
+  delay: Number(process.env.BULL_JOB_DELAY_MS),
+  attempts: Number(process.env.BULL_ATTEMPTS_DELAY),
   backoff: {
     type: 'exponential',
-    delay: process.env.BULL_BACKOFF_DELAY_MS
+    delay: Number(process.env.BULL_BACKOFF_DELAY_MS)
   }
 };
 
