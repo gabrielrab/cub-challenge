@@ -103,3 +103,17 @@ Comunicação com o Amazon Kinesis via Localstack:
     ```bash
     aws --endpoint-url=http://localhost:4566 --profile=localstack kinesis create-stream --stream-name notification --shard-count 1
     ```
+
+### Questões do desafio
+
+1- Caso o nossa aplicação fique indisponível por muito tempo, podemos perder eventos de mudança de status. Quais medidas você tomaria para deixar a aplicação mais robusta?
+
+_R: Algumas medidas podem ser tomadas caso de uma aplicação fique indisponível como a implementação de alguns mecanismos como: Uso de um sistema de filas para enfileiras as mensagens e enquanto a mensagem não for processada, o mesmo não sai da fila. Um segundo mecanismo é a criação de replicas da aplicação e balanceamento de carga, onde, se uma replica da aplicação falhar, a carga é direcionada a outra replica evitando assim indisponibilidade. E um terceiro mecanismo é a implementação de um circuit breaker para evitar falhas em cascata e mecanismos de retry automático para reprocessamento. Além de um sistema de logs e monitoramento para ajudar na identificação da causa do problema._
+
+2- Precisamos enviar os eventos de mudança de status das notificações para um stream de eventos (e.g. Apache Kafka, Amazon Kinesis Data Streams, etc) para que outras aplicações possam consumí-los. Precisamos garantir que cada evento seja entregado pelo menos uma vez no stream. Como você faria esse processo?
+
+_R: De maneira geral utilizar uma forma ou mecanismo de confirmação como por exemplo postback, ou até mecanismos de ack(acknowledgments) como os existente no RabitMQ, Apache Kafka entre outros. Esses mecanismos garantem que o sistema de eventos recebeu o evento, por meio do envio de uma confirmação do lado deles_
+
+3- Os eventos de mudança de estado podem vir fora de ordem caso o serviço externo de notificações demore para processar algumas notificações ou tenha alguma degradação de performance. Quais medidas você tomou ou tomaria para deixar a aplicação mais robusta a esse cenário?
+
+_R: Esse é um problema comum e paralelo a 'race conditions' e existem formas de controlar como por exemplo a criação de um mecanismo de versionamento, onde a cada atualização o dado recebe uma nova versão, e no momento desse dado ser processado você consegue verificar se há 'saltos/pulos' de versão, assim você consegue criar formas e controle da ordem. Outra maneira comum é a utilização de timestamps nos dados enviados, isso também permite o recebedor ordenar ou descartar eventos chegando na plataforma._
